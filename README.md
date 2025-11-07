@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DPO Agent
 
-## Getting Started
+Runtime API & LLM Engine for GDPR Compliance - The computational and data core of the DPOstudio.ai platform.
 
-First, run the development server:
+## Overview
+
+DPO Agent provides the runtime engine and API layer for GDPR compliance automation:
+
+- **LLM Pipeline**: Risk scoring and control recommendations
+- **Report Generation**: Automated DPIA, ROPA, and AI Impact reports
+- **Multi-tenant API**: Isolated processing for different organizations
+- **Agent Shell**: UI for monitoring and operator access
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm 9+
+- Environment variables configured
+- LLM API access configured
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clone repository
+git clone https://github.com/avantlehq/dpo-avantle-ai.git
+cd dpo-avantle-ai
+
+# Install dependencies
+pnpm install
+
+# Configure environment
+cp .env.example .env.local
+# Edit .env.local with your configuration
+
+# Start development server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Build & Deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Build for production
+pnpm build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Start production server
+pnpm start
 
-## Learn More
+# Lint code
+pnpm lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+## API Endpoints
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Engine API
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `POST /api/v1/engine/score` - Risk scoring analysis
+- `POST /api/v1/engine/suggest-controls` - Control recommendations
 
-## Deploy on Vercel
+### Report API
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `POST /api/v1/report/render` - Generate compliance reports
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Provisioning API
+
+- `POST /api/provision` - Create new tenant
+
+## Environment Configuration
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_ENV` | Environment type | `local` |
+| `DATABASE_URL` | Database connection string | - |
+| `JWT_SECRET` | JWT signing secret | - |
+| `LLM_API_KEY` | LLM service API key | - |
+| `LLM_MODEL` | LLM model identifier | `gpt-4` |
+| `ENCRYPTION_KEY` | Data encryption key | - |
+
+## Deployment
+
+### Vercel Deployment
+
+1. Connect repository to Vercel
+2. Configure domain: `dpo.avantle.ai`
+3. Set environment variables in Vercel dashboard
+4. Deploy
+
+### Custom Deployment
+
+1. Build the application: `pnpm build`
+2. Configure reverse proxy (nginx/Apache)
+3. Set environment variables
+4. Start with `pnpm start`
+
+## Authentication & Security
+
+- JWT-based authentication with tenant isolation
+- Rate limiting per tenant
+- Request/response encryption
+- No PII stored in logs
+- Strict security headers
+
+## Architecture
+
+```
+src/
+├── app/
+│   ├── agent/           # Agent monitoring shell
+│   ├── api/
+│   │   ├── v1/
+│   │   │   ├── engine/  # Risk scoring & control suggestions
+│   │   │   └── report/  # Report generation
+│   │   └── provision/   # Tenant provisioning
+│   └── page.tsx         # Agent landing page
+├── components/          # UI components
+└── lib/                 # Core logic and utilities
+```
+
+## Integration
+
+This service is consumed by DPO Studio (`dpostudio.ai`) for:
+
+- Tenant provisioning
+- Risk analysis processing
+- Report generation
+- Control recommendations
+
+## Development
+
+- Framework: Next.js 15 with App Router
+- Styling: Tailwind CSS
+- TypeScript: Full type safety
+- CI/CD: GitHub Actions
+- API: REST with JWT auth
+
+## Security Features
+
+- Multi-tenant data isolation
+- End-to-end encryption capabilities
+- Rate limiting and DOS protection
+- Audit logging (no PII)
+- Security headers configured
+
+## License
+
+Private repository - All rights reserved by Avantle.ai
